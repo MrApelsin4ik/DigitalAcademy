@@ -25,4 +25,4 @@ def signup(request):
 
 
 def login(request):
-    pass
+    return render(request, 'login.html')
