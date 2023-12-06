@@ -38,7 +38,5 @@ jobs:
         python3 manage.py makemigrations
         python3 manage.py migrate
         
-        # Run server
-        sudo python3 manage.py runserver 0.0.0.0:80
 
       
