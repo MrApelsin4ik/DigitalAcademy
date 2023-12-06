@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: apelsin4ik-server
+    runs-on: [self-hosted]
     strategy:
       max-parallel: 4
       matrix:
@@ -30,7 +30,7 @@ jobs:
         python3 manage.py test
   
   deploy:
-    runs-on: apelsin4ik-server
+    runs-on: [self-hosted]
     steps:
     - name: deploying
       run: |
