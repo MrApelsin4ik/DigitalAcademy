@@ -28,3 +28,22 @@ jobs:
     - name: Run Tests
       run: |
         python3 manage.py test
+  
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploying
+      run: |
+        export DJANGO_SECRET_KEY='django-insecure-_tiw8oli@f8)1@q*73b)h4!7r^@)k4y++3pu0lo&hgb2#1_8k)'
+        export DJANGO_DEBUG='false'
+        # Migrate database
+        python3 manage.py makemigrations
+        python3 manage.py migrate
+        
+        # Collect static files
+        python3 manage.py collectstatic
+        
+        # Run server
+        python3 manage.py runserver 0.0.0.0:80
+
+      
