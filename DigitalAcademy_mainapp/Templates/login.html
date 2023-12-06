@@ -6,7 +6,7 @@
     <title>Вход</title>
     <style>
         body {
-            background: #76b852;
+            background: #DEE9FF;
             font-family: "Roboto", sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -43,7 +43,7 @@
         .form button {
             text-transform: uppercase;
             outline: 0;
-            background: #4CAF50;
+            background: #394CFD;
             width: 100%;
             border: 0;
             padding: 15px;
@@ -55,7 +55,7 @@
         }
 
         .form button:hover, .form button:active, .form button:focus {
-            background: #43A047;
+            background: #001AFF;
         }
 
         .form .message {
@@ -65,7 +65,7 @@
         }
 
         .form .message a {
-            color: #4CAF50;
+            color: #394CFD;
             text-decoration: none;
         }
 
@@ -114,14 +114,14 @@
 
 <div class="login-page">
     <div class="form">
-        <form class="login-form">
-            <input type="email" id="email" name="email" placeholder="Почта" required>
-            <input type="password" id="password" name="password" placeholder="Пароль" required>
-
-            <button type="submit">Войти</button>
-
-            <p class="message">Еще не зарегистрированы? <a href="/">Зарегистрироваться</a></p>
-        </form>
+        <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="text" id="username" name="username" placeholder="никнейм" value="{{form.username.value|default:''}}" required >
+        <input type="password" id="password" name="password" placeholder="Пароль" value="{{ form.password.value|default:'' }}" required>
+        <button type="submit" style="width: 100px;">Войти</button>
+    </form>
+    <p class="error">{{ error_message }}</p>
+        <p class="message">Еще не зарегистрированы? <a href="/">Зарегистрироваться</a></p>
     </div>
 </div>
 

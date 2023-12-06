@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задания</title>
+
+<style>
+
+    body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+
+.header { background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+
+.header_title { margin: 0; }
+
+
+.container { max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px; }
+
+
+.body_container { display: flex;
+    justify-content: space-between; }
+
+
+.filters { position: relative;
+    display: inline-block;
+    cursor: pointer; }
+
+
+.filters_wrapper { margin-bottom: 20px; }
+
+
+.filters_title { margin-bottom: 10px; }
+
+
+.filters_search-input { width: 100%; padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px; }
+
+
+.checkbox_container {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+
+.filters_item {
+    display: block;
+    margin-right: 20px;
+    margin-bottom: 10px; }
+
+
+.checkbox-text { margin-left: 10px; }
+
+
+.modal { display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); }
+
+
+.modal-content { background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; }
+
+
+.close { color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold; }
+
+
+.close:hover, .close:focus { color: #000;
+    text-decoration: none;
+    cursor: pointer; }
+</style>
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1 class="header_title">
+                Задания по всем направлениям
+            </h1>
+        </div>
+    </div>
+
+    <div class="program-body">
+        <div class="container">
+            <div class="body_container">
+                <div class="filters" data-modal="modal_filter" data-filter="box">
+                    <div class="filter_container">
+                        <div class="placement-modal_close" data-modal-close="modal_filter"></div>
+                        <div class="filters_wrapper _search">
+                            <div class="filters_title">Поиск по программам</div>
+                            <div class="filters_search">
+                                <input class="filters_search-input" type="text" name="search" placeholder="Название программы ...">
+                            </div>
+                        </div>
+                        <div class="filters_wrapper" data-filter-type="direction">
+                            <div class="filters_title">Направления</div>
+                            <div class="checkbox_container">
+                                <label class="filters_item ">
+                                    <input class="checkbox-checker" type="checkbox" data-parametr="Направление (тег)" value="Информационные технологии">
+                                    <span class="checkbox-text ">Разработка</span>
+                                </label>
+                                <label class="filters_item checkbox">
+                                    <input class="checkbox-checker" type="checkbox" data-parametr="Направление (тег)" value="Системный анализ">
+                                    <span class="checkbox-text">Дизайн</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="task-container">
+                    {% for task in tasks %}
+                    <div class="task-item">
+                        <h3>{{ task.name }}</h3>
+                        <p>{{ task.description }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

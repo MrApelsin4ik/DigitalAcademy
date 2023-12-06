@@ -6,7 +6,7 @@
     <title>Регистрация</title>
     <style>
         body {
-            background: #76b852;
+            background: #DEE9FF;
             font-family: "Roboto", sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -43,7 +43,7 @@
         .form button {
             text-transform: uppercase;
             outline: 0;
-            background: #4CAF50;
+            background: #394CFD;
             width: 48%;
             border: 0;
             padding: 15px;
@@ -57,7 +57,7 @@
         }
 
         .form button:hover, .form button:active, .form button:focus {
-            background: #43A047;
+            background: #001AFF;
         }
 
         .form .message {
@@ -67,7 +67,7 @@
         }
 
         .form .message a {
-            color: #4CAF50;
+            color: #394CFD;
             text-decoration: none;
         }
 
@@ -116,7 +116,7 @@
         #partnerBtn {
             text-transform: uppercase;
             outline: 0;
-            background: #4CAF50;
+            background: #394CFD;
             width: 48%;
             border: 0;
             padding: 15px;
@@ -135,7 +135,7 @@
         #partnerBtn:hover,
         #partnerBtn:active,
         #partnerBtn:focus {
-            background: #43A047;
+            background: #001AFF;
         }
 
         #participantFields,
@@ -172,23 +172,23 @@
         {% endif %}
         <form method="post" class="register-form" action="{% url 'signup' %}">
             {% csrf_token %}
-
-            <input type="text" id="full_name" name="full_name" placeholder="ФИО" value="{{ form.email.value|default:'' }}" required>
-            <input type="email" id="email" name="email" placeholder="Почта" value="{{ form.email.value|default:'' }}" required>
+            <input type="text" id="username" name="username" placeholder="никнейм" value="{{form.username.value|default:''}}" required >
+            <input type="text" id="full_name" name="full_name" placeholder="ФИО" value="{{ form.full_name.value|default:'' }}" >
+            <input type="email" id="email" name="email" placeholder="Почта" value="{{ form.email.value|default:'' }}" >
             <input type="password" id="password1" name="password1" placeholder="Пароль" value="{{ form.password1.value|default:'' }}" required>
             <input type="password" id="password2" name="password2" placeholder="Пароль" value="{{ form.password2.value|default:'' }}" required>
             <!-- Participant fields -->
             <div id="participantFields">
-                <input type="text" id="region" name="region" placeholder="Region" value="{{ form.region.value|default:'' }}" >
-                <input type="text" id="school_name" name="school_name" placeholder="School name" value="{{ form.school_name.value|default:'' }}" >
-                <input type="number" id="age" name="age" placeholder="Age" value="{{ form.age.value|default:'' }}" >
-                <input type="text" id="grade_or_course" name="grade_or_course" placeholder="Grade or course" value="{{ form.grade_or_course.value|default:'' }}" >
+                <input type="text" id="region" name="region" placeholder="Регион" value="{{ form.region.value|default:'' }}" >
+                <input type="text" id="school_name" name="school_name" placeholder="Наименование учебного заведения" value="{{ form.school_name.value|default:'' }}" >
+                <input type="number" id="age" name="age" placeholder="Возраст" value="{{ form.age.value|default:'' }}" >
+                <input type="text" id="grade_or_course" name="grade_or_course" placeholder="Класс/курс" value="{{ form.grade_or_course.value|default:'' }}" >
 
             </div>
 
             <!-- Partner fields -->
             <div id="partnerFields">
-                <input type="text" id="organization_name" name="organization_name" placeholder="Organization name" value="{{ form.organization_name.value|default:'' }}" >
+                <input type="text" id="organization_name" name="organization_name" placeholder="Название организации" value="{{ form.organization_name.value|default:'' }}" >
 
             </div>
             <button type="submit" style="width: 200px;">Зарегистрироваться</button>
@@ -213,7 +213,6 @@
     const participantFields = document.getElementById('participantFields');
     const partnerFields = document.getElementById('partnerFields');
 
-    participantFields.style.display = 'none'; // Initial state
     partnerFields.style.display = 'none'; // Initial state
 
     const participantBtn = document.getElementById('participantBtn');
