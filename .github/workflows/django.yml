@@ -17,6 +17,8 @@ jobs:
     steps:
     - name: Install Dependencies
       run: |
+        cd /home/apelsin4ik/actions-runner/sites/
+        git clone https://github.com/MrApelsin4ik/DigitalAcademy.git
         cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy/DigitalAcademy
 
         python3 -m pip install --upgrade pip
