@@ -1,28 +1,24 @@
 from django.shortcuts import render, redirect
 
-from .forms import ParticipantRegistrationForm, PartnerRegistrationForm
+from .forms import RegistrationForm
 
 
 def signup(request):
     if request.method == 'POST':
-        user_type = request.POST.get('user_type')
-        if user_type == 'participant':
-            form = ParticipantRegistrationForm(request.POST)
-        elif user_type == 'partner':
-            form = PartnerRegistrationForm(request.POST)
-        else:
-            # Обработка некорректного значения user_type
-            return redirect('registration')
-
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            # Добавьте необходимую логику для успешной регистрации
-
+            return redirect('main')  # Redirect to a success page
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print(f"Ошибка в поле '{field}': {error}")
     else:
-        form = ParticipantRegistrationForm()  # или любая другая форма по умолчанию
-
+        form = RegistrationForm()
     return render(request, 'signup.html', {'form': form})
 
-
 def login(request):
-    return render(request, 'login.html')
+    pass
+
+def main(request):
+    pass

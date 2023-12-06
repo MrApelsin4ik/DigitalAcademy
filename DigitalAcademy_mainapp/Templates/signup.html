@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +44,7 @@
             text-transform: uppercase;
             outline: 0;
             background: #4CAF50;
-            width: 48%; /* Adjusted width */
+            width: 48%;
             border: 0;
             padding: 15px;
             color: #FFFFFF;
@@ -52,8 +52,8 @@
             -webkit-transition: all 0.3s ease;
             transition: all 0.3s ease;
             cursor: pointer;
-            display: inline-block; /* Align buttons in the same line */
-            margin-right: 4px; /* Added margin between buttons */
+            display: inline-block;
+            margin-right: 4px;
         }
 
         .form button:hover, .form button:active, .form button:focus {
@@ -110,6 +110,51 @@
         .container .info span .fa {
             color: #EF3B3A;
         }
+
+        /* Add the styles for participant and partner buttons and fields from the first file */
+        #participantBtn,
+        #partnerBtn {
+            text-transform: uppercase;
+            outline: 0;
+            background: #4CAF50;
+            width: 48%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        #participantBtn:hover,
+        #participantBtn:active,
+        #participantBtn:focus,
+        #partnerBtn:hover,
+        #partnerBtn:active,
+        #partnerBtn:focus {
+            background: #43A047;
+        }
+
+        #participantFields,
+        #partnerFields {
+            margin-top: 15px;
+        }
+
+        #participantFields input,
+        #partnerFields input {
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
@@ -118,38 +163,61 @@
     <div class="form">
         <button id="participantBtn" style="margin-bottom: 10px">Участник</button>
         <button id="partnerBtn" style="margin-bottom: 10px">Партнер</button>
+        <p id="error-message" style="color: red;"></p>
+        {% if form.password1.errors %}
+            <p style="color: red;">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+        {% if form.password2.errors %}
+            <p style="color: red;">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+        <form method="post" class="register-form" action="{% url 'signup' %}">
+            {% csrf_token %}
 
-        <form class="register-form">
-            <input type="text" id="full_name" name="full_name" placeholder="ФИО" required>
-            <input type="email" id="email" name="email" placeholder="Почта" required>
-            <input type="password" id="password" name="password" placeholder="Пароль" required>
-
+            <input type="text" id="full_name" name="full_name" placeholder="ФИО" value="{{ form.email.value|default:'' }}" required>
+            <input type="email" id="email" name="email" placeholder="Почта" value="{{ form.email.value|default:'' }}" required>
+            <input type="password" id="password1" name="password1" placeholder="Пароль" value="{{ form.password1.value|default:'' }}" required>
+            <input type="password" id="password2" name="password2" placeholder="Пароль" value="{{ form.password2.value|default:'' }}" required>
+            <!-- Participant fields -->
             <div id="participantFields">
-                <!-- Participant fields here -->
-                <input type="text" id="region" name="region" placeholder="Регион">
-                <input type="text" id="school_name" name="school_name" placeholder="Наименование учебного заведения">
-                <input type="number" id="age" name="age" placeholder="Возраст">
-                <input type="text" id="grade_or_course" name="grade_or_course" placeholder="Класс/Курс">
+                <input type="text" id="region" name="region" placeholder="Region" value="{{ form.region.value|default:'' }}" >
+                <input type="text" id="school_name" name="school_name" placeholder="School name" value="{{ form.school_name.value|default:'' }}" >
+                <input type="number" id="age" name="age" placeholder="Age" value="{{ form.age.value|default:'' }}" >
+                <input type="text" id="grade_or_course" name="grade_or_course" placeholder="Grade or course" value="{{ form.grade_or_course.value|default:'' }}" >
+
             </div>
 
-            <div id="partnerFields" style="display: none;">
-                <!-- Partner fields here -->
-                <input type="text" id="organization_name" name="organization_name" placeholder="Наименование организации">
-            </div>
+            <!-- Partner fields -->
+            <div id="partnerFields">
+                <input type="text" id="organization_name" name="organization_name" placeholder="Organization name" value="{{ form.organization_name.value|default:'' }}" >
 
+            </div>
             <button type="submit" style="width: 200px;">Зарегистрироваться</button>
-
-            <p class="message">Уже зарегистрированы?<a href="login">Войти</a></p>
         </form>
+        <p class="message">Уже зарегистрированы?<a href="login">Войти</a></p>
     </div>
 </div>
 
 <script>
-    const participantBtn = document.getElementById('participantBtn');
-    const partnerBtn = document.getElementById('partnerBtn');
+    const password1 = document.getElementById('password1');
+    const password2 = document.getElementById('password2');
+    const errorMessage = document.getElementById('error-message');
+
+    password2.addEventListener('input', () => {
+        if (password1.value !== password2.value) {
+            errorMessage.textContent = 'Пароли не совпадают';
+        } else {
+            errorMessage.textContent = '';
+        }
+    });
+
     const participantFields = document.getElementById('participantFields');
     const partnerFields = document.getElementById('partnerFields');
-    const registerForm = document.querySelector('.register-form');
+
+    participantFields.style.display = 'none'; // Initial state
+    partnerFields.style.display = 'none'; // Initial state
+
+    const participantBtn = document.getElementById('participantBtn');
+    const partnerBtn = document.getElementById('partnerBtn');
 
     participantBtn.addEventListener('click', () => {
         participantFields.style.display = 'block';
@@ -160,8 +228,6 @@
         participantFields.style.display = 'none';
         partnerFields.style.display = 'block';
     });
-
-
 </script>
 
 </body>
