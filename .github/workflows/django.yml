@@ -34,6 +34,7 @@ jobs:
     steps:
     - name: deploying
       run: |
+        cd DigitalAcademy
         export DJANGO_SECRET_KEY='django-insecure-_tiw8oli@f8)1@q*73b)h4!7r^@)k4y++3pu0lo&hgb2#1_8k)'
         export DJANGO_DEBUG='false'
         # Migrate database
