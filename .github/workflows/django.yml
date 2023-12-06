@@ -20,7 +20,7 @@ jobs:
         cd /home/apelsin4ik/actions-runner/sites/
         rm -rf DigitalAcademy
         git clone https://github.com/MrApelsin4ik/DigitalAcademy.git
-        cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy/DigitalAcademy
+        cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy
 
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
@@ -30,7 +30,7 @@ jobs:
 
     - name: deploying
       run: |
-        cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy/DigitalAcademy
+        cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy
 
         export DJANGO_DEBUG='false'
         export DJANGO_SECRET_KEY='django-insecure-_tiw8oli@f8)1@q*73b)h4!7r^@)k4y++3pu0lo&hgb2#1_8k)'
