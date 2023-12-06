@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build_and_deploy:
 
     runs-on: [self-hosted]
     strategy:
@@ -18,6 +18,7 @@ jobs:
     - name: Install Dependencies
       run: |
         cd /home/apelsin4ik/actions-runner/sites/
+        rm -rf DigitalAcademy
         git clone https://github.com/MrApelsin4ik/DigitalAcademy.git
         cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy/DigitalAcademy
 
@@ -26,10 +27,7 @@ jobs:
     - name: Run Tests
       run: |
         python3 manage.py test
-  
-  deploy:
-    runs-on: [self-hosted]
-    steps:
+
     - name: deploying
       run: |
         cd /home/apelsin4ik/actions-runner/sites/DigitalAcademy/DigitalAcademy
