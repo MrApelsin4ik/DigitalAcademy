@@ -15,15 +15,20 @@
     color: #333;
 }
 
-
-.header { background-color: #7381FF;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #7381FF;
     color: #fff;
     text-align: center;
     padding: 10px;
 }
 
+.header_title {
+    margin: 0;
+}
 
-.header_title { margin: 0; }
 
 
 .container { max-width: 1100px;
@@ -133,21 +138,67 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+.profile-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-button {
+  background-color: transparent;
+  color: #333;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 120px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.icon-button:hover + .dropdown-content, .dropdown-content:hover {
+  display: block;
+}
+
 </style>
 
 </head>
 
 <body>
-    <div class="header">
-        <div class="container">
+
+<div class="header">
+    <div class="container">
+        <div class="header_content">
             <h1 class="header_title">
                 Задания по всем направлениям
             </h1>
+            <div class="profile-icon">
+                <button class="icon-button" onclick="toggleDropdown()">Profile</button>
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="#">Профиль</a>
+                    <a href="#">Выход</a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
     <div class="program-body">
         <div class="container">
+
             <div class="body_container">
                 <div class="filters" data-modal="modal_filter" data-filter="box">
                     <div class="filter_container">

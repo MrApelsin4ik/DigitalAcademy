@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Форма создания задания</title>
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #7381ff79;
+    margin: 0;
+    padding: 0;
+    }
+
+    form {
+    width: 400px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    }
+
+    label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+    width: 97%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    }
+
+    textarea {
+    height: 100px;
+    resize: vertical;
+    }
+
+    h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    }
+
+    textarea {
+    height: 200px;
+    resize: vertical;
+    }
+
+
+    input[type="file"] {
+    width: 97%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    }
+    input[type="file"]::-webkit-file-upload-button:hover{
+        background-color: #11147c;
+    }
+
+    input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    }
+
+    input[type="submit"]:hover{
+        background-color: #11147c;
+    }
+
+</style>
+<body>
+    <form action="/make_task" method="post" enctype="multipart/form-data">
+        <label for="name">Название:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="file">Прикрепить файл:</label>
+        <input type="file" id="file" name="file"><br><br>
+
+        <input type="submit" value="Отправить">
+    </form>
+</body>
+</html>

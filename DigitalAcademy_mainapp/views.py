@@ -99,16 +99,23 @@ def partner_profile(request):
         user.save()
         return redirect(partner_profile)
     else:
+        is_avatar = True
         user = request.user
         if not user_profile.avatar:
             user_profile.avatar = None
-
+            is_avatar = False
         context = {
             'username': user.username,
             'avatar': user_profile.avatar,
             'tasks': Tasks.objects.all(),
+            'is_avatar': is_avatar,
         }
         return render(request, 'partner_profile.html', context)
+
+
+@login_required
+def make_task(request):
+    return render(request, 'make_task.html')
 
 
 @login_required
