@@ -45,7 +45,7 @@
     display: inline-block;
     cursor: pointer;
     margin-right:15vh;
-    width: 60vh;}
+    width: 40vh;}
 
 
 .filters_wrapper { margin-bottom: 20px; }
@@ -54,7 +54,7 @@
 .filters_title { margin-bottom: 10px; }
 
 
-.filters_search-input { width: 100%; padding: 10px;
+.filters_search-input { width: 70%; padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px; }
 
@@ -186,10 +186,10 @@
                 Задания по всем направлениям
             </h1>
             <div class="profile-icon">
-                <button class="icon-button" onclick="toggleDropdown()">Profile</button>
+                <button class="icon-button" onclick="toggleDropdown()">Профиль</button>
                 <div class="dropdown-content" id="profileDropdown">
-                    <a href="#">Профиль</a>
-                    <a href="#">Выход</a>
+                    <a href="/profile/">Профиль</a>
+                    <a href="/logout/">Выход</a>
                 </div>
             </div>
         </div>
@@ -203,6 +203,8 @@
                 <div class="filters" data-modal="modal_filter" data-filter="box">
                     <div class="filter_container">
                         <div class="placement-modal_close" data-modal-close="modal_filter"></div>
+                        <form method="post">
+                            {% csrf_token %}
                         <div class="filters_wrapper _search">
                             <div class="filters_title"><b>Поиск по заданиям</b></div>
                             <div class="filters_search">
@@ -212,14 +214,24 @@
                         <div class="filters_wrapper" data-filter-type="direction">
                             <div class="filters_title"><b>Направления</b></div>
                             <div class="checkbox_container">
+                                <div>
+                                <label class="filters_item" data-parametr="all">
+                                    <input type="checkbox" name="directions" value="all">
+                                    <span class="checkbox-text">Все</span>
+                                </label></div>
                                 {% for direction in directions %}
+                                <div>
                                     <label class="filters_item" data-parametr="Направление (тег)">
-                                        <input class="checkbox-checker" type="checkbox">
-                                        <span class="checkbox-text">{{ direction.direction }}</span>
-                                    </label>
+                                        <label class="filters_item" data-parametr="Направление (тег)">
+                                          <input type="checkbox" name="directions" value="{{ direction.id }}">
+                                          <span class="checkbox-text">{{ direction.direction }}</span>
+                                      </label>
+                                    </label></div>
                                 {% endfor %}
                             </div>
                         </div>
+                            <button type="submit">Применить фильтры</button>
+                        </form>
                     </div>
                 </div>
                 <div class="task-container">

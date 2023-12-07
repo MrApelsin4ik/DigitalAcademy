@@ -1,10 +1,13 @@
+from random import randint
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from fuzzywuzzy import fuzz
 
 from .forms import RegistrationForm
-from .models import Tasks, UserProfile, Directions
+from .models import Tasks, UserProfile, Directions, TaskFile, DirectionTasks, OwnerTask
 
 
 def logout_user(request):
@@ -37,6 +40,66 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
+@login_required
+def participant_profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if request.method == 'POST':
+
+        email = request.POST.get('email')
+        full_name = request.POST.get('full_name')
+        age = request.POST.get('age')
+        region = request.POST.get('region')
+        school_name = request.POST.get('school_name')
+        grade_or_course = request.POST.get('grade_or_course')
+        avatar = request.FILES.get('avatar')
+
+        user = user_profile
+        if email:
+            user.email = email
+        if full_name:
+            user.full_name = full_name
+        if age:
+            user.age = age
+        if region:
+            user.region = region
+        if school_name:
+            user.school_name = school_name
+        if grade_or_course:
+            user.grade_or_course = grade_or_course
+        if avatar:
+            user.avatar = avatar
+
+        user.save()
+        return redirect(partner_profile)
+    else:
+        user = request.user
+        user_tasks_ids = OwnerTask.objects.filter(user=user).values_list('task_id', flat=True)
+        user_tasks = Tasks.objects.filter(id__in=user_tasks_ids)
+
+        is_avatar = True
+        if not user_profile.avatar:
+            user_profile.avatar = None
+            is_avatar = False
+        context = {
+            'username': user.username,
+            'avatar': user_profile.avatar,
+            'tasks': user_tasks,
+            'is_avatar': is_avatar,
+        }
+    return render(request, 'participant_profile.html', context)
+
+@login_required
+def profile(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if user_profile.is_participant:
+        # Редирект для участника
+        return redirect('participant_profile')
+    else:
+        # Редирект для партнера
+        return redirect('partner_profile')
+
+
 def login_view(request):
     if request.method == 'POST':
 
@@ -54,7 +117,7 @@ def login_view(request):
 def main(request):
     # Получаем профиль пользователя
     user_profile = UserProfile.objects.get(user=request.user)
-    direction = Directions.objects.all()
+
     # Проверяем, является ли пользователь партнером
     if user_profile.is_participant:
         # Редирект для участника
@@ -62,6 +125,10 @@ def main(request):
     else:
         # Редирект для партнера
         return redirect('partner_profile')
+
+@login_required
+def add_project(request):
+    pass
 
 
 @login_required
@@ -71,10 +138,7 @@ def partner_profile(request):
 
         email = request.POST.get('email')
         full_name = request.POST.get('full_name')
-        age = request.POST.get('age')
         region = request.POST.get('region')
-        school_name = request.POST.get('school_name')
-        grade_or_course = request.POST.get('grade_or_course')
         organization_name = request.POST.get('organization_name')
         avatar = request.FILES.get('avatar')
 
@@ -83,14 +147,6 @@ def partner_profile(request):
             user.email = email
         if full_name:
             user.full_name = full_name
-        if age:
-            user.age = age
-        if region:
-            user.region = region
-        if school_name:
-            user.school_name = school_name
-        if grade_or_course:
-            user.grade_or_course = grade_or_course
         if organization_name:
             user.organization_name = organization_name
         if avatar:
@@ -99,15 +155,18 @@ def partner_profile(request):
         user.save()
         return redirect(partner_profile)
     else:
-        is_avatar = True
         user = request.user
+        user_tasks_ids = OwnerTask.objects.filter(user=user).values_list('task_id', flat=True)
+        user_tasks = Tasks.objects.filter(id__in=user_tasks_ids)
+
+        is_avatar = True
         if not user_profile.avatar:
             user_profile.avatar = None
             is_avatar = False
         context = {
             'username': user.username,
             'avatar': user_profile.avatar,
-            'tasks': Tasks.objects.all(),
+            'tasks': user_tasks,
             'is_avatar': is_avatar,
         }
         return render(request, 'partner_profile.html', context)
@@ -115,11 +174,59 @@ def partner_profile(request):
 
 @login_required
 def make_task(request):
-    return render(request, 'make_task.html')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        file = request.FILES.get('file')
+        selected_directions = request.POST.getlist('direction')
+
+        # Create a new task
+        new_task = Tasks(name=name, description=description, accelcoin_amount=randint(1, 70))
+        new_task.save()
+
+        task_file = TaskFile(task=new_task, file=file)
+        task_file.save()
+
+        for direction_id in selected_directions:
+            DirectionTasks.objects.create(direction_id=direction_id, task_id=new_task.id)
+
+        OwnerTask.objects.create(task_id=new_task, user=request.user)
+
+
+
+    else:
+        directions = Directions.objects.all()
+        return render(request, 'make_task.html', {'directions': directions})
+
+    return redirect('partner_profile')
 
 
 @login_required
 def tasklist_view(request):
-    tasks = Tasks.objects.all()
-    directions = Directions.objects.all()
-    return render(request, 'tasklist_page.html', {'tasks': tasks, 'directions': directions})
+
+    if request.method == 'POST':
+        search_keyword = request.POST.get('search', '')
+        selected_directions = request.POST.getlist('directions')  # Массив выбранных направлений
+
+        tasks = Tasks.objects.all()
+
+        # Фильтрация по направлениям
+        if 'all' not in selected_directions:
+            tasks = tasks.filter(directions__in=selected_directions)
+
+        # Поиск по названию задания
+        if search_keyword:
+            tasks = [task for task in tasks if fuzz.partial_ratio(task.name.lower(), search_keyword.lower()) > 80]
+        context = {
+            'tasks': tasks,
+            'directions': Directions.objects.all()  # передаем все направления для отображения фильтров
+        }
+
+        return render(request, 'tasklist_page.html', context)
+
+    else:
+        context = {
+            'tasks': Tasks.objects.all(),
+            'directions': Directions.objects.all()
+        }
+    return render(request, 'tasklist_page.html', context)

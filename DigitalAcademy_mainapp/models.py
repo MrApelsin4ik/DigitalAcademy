@@ -23,6 +23,10 @@ class Tasks(models.Model):
     accelcoin_amount = models.IntegerField()
     directions = models.ManyToManyField(Directions, through='DirectionTasks')
 
+class OwnerTask(models.Model):
+    task_id = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 class DirectionTasks(models.Model):
     task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
     direction = models.ForeignKey(Directions, on_delete=models.CASCADE)
