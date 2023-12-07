@@ -11,8 +11,22 @@ class UserProfile(models.Model):
     grade_or_course = models.CharField(max_length=255, default="", blank=True)
     organization_name = models.CharField(max_length=255, default="", blank=True)
     email = models.CharField(max_length=255, default="")
+    avatar = models.ImageField(upload_to='uploads/', blank=True, null=True)
 
+
+class Directions(models.Model):
+    direction = models.CharField(max_length=150)
 
 class Tasks(models.Model):
     name = models.CharField(max_length=255, default="", blank=True)
     description = models.TextField()
+    accelcoin_amount = models.IntegerField()
+    directions = models.ManyToManyField(Directions, through='DirectionTasks')
+
+class DirectionTasks(models.Model):
+    task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    direction = models.ForeignKey(Directions, on_delete=models.CASCADE)
+
+class TaskFile(models.Model):
+    task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='task_files/')

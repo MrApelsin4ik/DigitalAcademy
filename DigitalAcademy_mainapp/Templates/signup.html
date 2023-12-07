@@ -161,8 +161,8 @@
 
 <div class="login-page">
     <div class="form">
-        <button id="participantBtn" style="margin-bottom: 10px">Участник</button>
-        <button id="partnerBtn" style="margin-bottom: 10px">Партнер</button>
+        <button id="participantBtn" data-is-participant="1" style="margin-bottom: 10px">Участник</button>
+        <button id="partnerBtn" data-is-participant="0" style="margin-bottom: 10px">Партнер</button>
         <p id="error-message" style="color: red;"></p>
         {% if form.password1.errors %}
             <p style="color: red;">{{ form.password1.errors.0 }}</p>
@@ -172,6 +172,7 @@
         {% endif %}
         <form method="post" class="register-form" action="{% url 'signup' %}">
             {% csrf_token %}
+            <input type="hidden" name="is_participant" id="is_participant" value="{{form.is_participant.value}}">
             <input type="text" id="username" name="username" placeholder="никнейм" value="{{form.username.value|default:''}}" required >
             <input type="text" id="full_name" name="full_name" placeholder="ФИО" value="{{ form.full_name.value|default:'' }}" >
             <input type="email" id="email" name="email" placeholder="Почта" value="{{ form.email.value|default:'' }}" >
@@ -213,19 +214,22 @@
     const participantFields = document.getElementById('participantFields');
     const partnerFields = document.getElementById('partnerFields');
 
-    partnerFields.style.display = 'none'; // Initial state
+    partnerFields.style.display = 'none';
 
     const participantBtn = document.getElementById('participantBtn');
     const partnerBtn = document.getElementById('partnerBtn');
+    const isParticipant = document.getElementById('is_participant');
 
     participantBtn.addEventListener('click', () => {
         participantFields.style.display = 'block';
         partnerFields.style.display = 'none';
+        isParticipant.value = true;
     });
 
     partnerBtn.addEventListener('click', () => {
         participantFields.style.display = 'none';
         partnerFields.style.display = 'block';
+        isParticipant.value = false;
     });
 </script>
 

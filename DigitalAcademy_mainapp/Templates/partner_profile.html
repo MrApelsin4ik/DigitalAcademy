@@ -1,0 +1,280 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Профиль партнера</title> <style> body { font-family: Arial, sans-serif; }
+.form-group {
+  max-width: 300px; /* Set your desired maximum width */
+  margin: 0 auto; /* This will center the container horizontally */
+  padding: 20px; /* Add some padding to the container */
+  border: 1px solid #ddd; /* Add a border around the container */
+  border-radius: 5px; /* Optional: Add some border radius for rounded corners */
+}
+
+.form-control{width:275px;}
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-right: 10vh;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-info h1 {
+    margin: 0;
+}
+
+.profile-info p {
+    margin: 0;
+}
+
+.edit-profile-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+ body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+
+.button-container-div {
+  display: flex;
+  justify-content: center;
+  margin-top: 5vh;
+}
+
+.header { background-color: #7381FF;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    height:1vh;
+}
+
+
+.header_title { margin: 0;
+height:1vh;}
+
+
+.container { max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px; }
+
+
+.body_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters { position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-right:15vh;
+    width: 30vh;}
+
+
+.filters_wrapper { margin-bottom: 20px; }
+
+
+.filters_title { margin-bottom: 10px; }
+
+
+.filters_search-input { width: 100%; padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px; }
+
+
+.checkbox_container {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+
+.filters_item {
+    display: block;
+    margin-right: 20px;
+    margin-bottom: 10px; }
+
+
+.checkbox-text { margin-left: 10px; }
+
+
+.modal { display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); }
+
+
+.modal-content { background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; }
+
+
+.close { color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold; }
+
+
+.close:hover, .close:focus { color: #000;
+    text-decoration: none;
+    cursor: pointer; }
+
+.task-container {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: flex-start;
+}
+.task-item {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35vh;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.task-item h3 {
+  width: fit-content;
+  max-width: 35vh;
+  font-size: 3vh;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-item p {
+  font-size: 1.5vh;;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-item h3, .task-item p {
+  overflow-wrap: break-word;
+}
+</style>
+</head> <body> <div class="header"> <div class="container"> </div> </div>
+<div class="program-body"> <div class="container"> <div class="body_container"> <div class="profile-header">
+
+            <div class="profile">
+                      <img src= '{{avatar.url}}' class="profile-avatar">
+                      <h2>{{ username }}</h2>
+                      <button id="edit_btn">Редактировать профиль</button>
+                    </div>
+        </div>
+        <div class="task-container">
+         {% for task in tasks %}
+         <div class="task-item">
+            <h3>{{ task.name }}</h3>
+            <p>{{ task.description }}</p>
+            <p>{{ task.accelcoin_amount }}</p>
+         </div>
+         {% endfor %}
+        </div>
+    </div>
+</div>
+</div> <div id="myModal" class="modal"> <!-- Modal content --> <div class="modal-content"> <span class="close">&times;</span>
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="form-group">
+    <div><label for="email">Почта:</label></div>
+
+  <input type="email" class="form-control" id="email" placeholder="Введите почту" name="email" value="{{user.email}}">
+</div>
+
+<div class="form-group">
+  <div><label for="full_name">ФИО:</label></div>
+  <input type="text" class="form-control" id="full_name" placeholder="Введите ФИО" name="full_name" value="{{user.full_name}}">
+</div>
+
+<div class="form-group">
+
+  <div><label for="age">Возраст:</label></div>
+  <input type="number" class="form-control" id="age" placeholder="Введите возраст " name="age" value="{{user.age}}">
+</div>
+
+<div class="form-group">
+  <div><label for="region">Регион:</label></div>
+  <input type="text" class="form-control" id="region" placeholder="Введите регион" name="region" value="{{user.region}}">
+</div>
+
+<div class="form-group">
+  <div><label for="school_name">Наименование учебного заведения:</label></div>
+  <input type="text" class="form-control" id="school_name" placeholder="Введите наименование учебного заведения" name="school_name" value="{{user.school_name}}">
+</div>
+
+<div class="form-group">
+    <div><label for="grade_or_course">Класс/курс:</label></div>
+  <input type="text" class="form-control" id="grade_or_course" placeholder="Введите класс/курс" name="grade_or_course" value="{{user.grade_or_course}}">
+</div>
+
+<div class="form-group">
+  <div><label for="organization_name">Наименование организации:</label></div>
+  <input type="text" class="form-control" id="organization_name" placeholder="Введите наименование организации" name="organization_name" value="{{user.organization_name}}">
+</div>
+
+<div class="form-group">
+    <div>
+  <label for="avatar">Загрузите аватар:</label> </div>
+  <input type="file" id="avatar" name="avatar">
+</div>
+<div class="button-container-div"> <button type="submit" class="btn btn-default">Сохранить</button> </div>
+
+</form>
+</div> </div> <script>
+// Get the button that opens the modal
+var editButton = document.getElementById('edit_btn');
+
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// When the user clicks the button, open the modal
+editButton.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+var closeBtn = document.querySelector('.close');
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+</body> </html>
+
+

@@ -16,7 +16,7 @@
 }
 
 
-.header { background-color: #333;
+.header { background-color: #7381FF;
     color: #fff;
     text-align: center;
     padding: 10px;
@@ -31,13 +31,16 @@
     padding: 20px; }
 
 
-.body_container { display: flex;
-    justify-content: space-between; }
-
+.body_container {
+  display: flex;
+  justify-content: space-between;
+}
 
 .filters { position: relative;
     display: inline-block;
-    cursor: pointer; }
+    cursor: pointer;
+    margin-right:15vh;
+    width: 60vh;}
 
 
 .filters_wrapper { margin-bottom: 20px; }
@@ -56,6 +59,7 @@
     flex-wrap: wrap;
     column-gap: 10px;
     row-gap: 10px;
+    margin-right: 10vh;
 }
 
 
@@ -65,7 +69,10 @@
     margin-bottom: 10px; }
 
 
-.checkbox-text { margin-left: 10px; }
+.checkbox-text {
+    display: inline-block;
+  vertical-align: middle;
+    margin-left: 10px; }
 
 
 .modal { display: none;
@@ -95,6 +102,37 @@
 .close:hover, .close:focus { color: #000;
     text-decoration: none;
     cursor: pointer; }
+
+.task-container {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: flex-start;
+}
+.task-item {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35vh;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.task-item h3 {
+  font-size: 24px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-item p {
+  font-size: 18px;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>
 
 </head>
@@ -115,39 +153,39 @@
                     <div class="filter_container">
                         <div class="placement-modal_close" data-modal-close="modal_filter"></div>
                         <div class="filters_wrapper _search">
-                            <div class="filters_title">Поиск по программам</div>
+                            <div class="filters_title"><b>Поиск по заданиям</b></div>
                             <div class="filters_search">
-                                <input class="filters_search-input" type="text" name="search" placeholder="Название программы ...">
+                                <input class="filters_search-input" type="text" name="search" placeholder="Название задания ...">
                             </div>
                         </div>
                         <div class="filters_wrapper" data-filter-type="direction">
-                            <div class="filters_title">Направления</div>
+                            <div class="filters_title"><b>Направления</b></div>
                             <div class="checkbox_container">
-                                <label class="filters_item ">
-                                    <input class="checkbox-checker" type="checkbox" data-parametr="Направление (тег)" value="Информационные технологии">
-                                    <span class="checkbox-text ">Разработка</span>
-                                </label>
-                                <label class="filters_item checkbox">
-                                    <input class="checkbox-checker" type="checkbox" data-parametr="Направление (тег)" value="Системный анализ">
-                                    <span class="checkbox-text">Дизайн</span>
-                                </label>
+                                {% for direction in directions %}
+                                    <label class="filters_item" data-parametr="Направление (тег)">
+                                        <input class="checkbox-checker" type="checkbox">
+                                        <span class="checkbox-text">{{ direction.direction }}</span>
+                                    </label>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="task-container">
-                    {% for task in tasks %}
-                    <div class="task-item">
-                        <h3>{{ task.name }}</h3>
-                        <p>{{ task.description }}</p>
-                    </div>
-                    {% endfor %}
+                  {% for task in tasks %}
+                  <div class="task-item">
+                    <h3>{{ task.name }}</h3>
+                    <p>{{ task.description }}</p>
+                    <p>{{ task.accelcoin_amount }}</p>
+                  </div>
+                  {% endfor %}
                 </div>
 
             </div>
         </div>
     </div>
 </body>
+
 </html>
 
 
