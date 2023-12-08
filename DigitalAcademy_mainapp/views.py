@@ -43,18 +43,19 @@ def signup(request):
 def chat(request):
     if request.method == 'POST':
         message = request.POST['message']
-        response = yagpt.generate(message)
-        return render(request, 'chat.html', {'response': response})
+        if message:
+            response = yagpt.generate(message)
+            return render(request, 'chat.html', {'response': response})
+        else:
+            return redirect('chat')
     else:
         return render(request, 'chat.html')
 
 
 def wallet(request):
     wallet, created = Wallet.objects.get_or_create(user=request.user)
-    if created:
-        wallet_id = created
-    else:
-        wallet_id = wallet.am
+
+    wallet_id = wallet.am
 
     return render(request, 'wallet.html', {'wallet': wallet_id})
 

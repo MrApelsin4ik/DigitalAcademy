@@ -18,7 +18,7 @@ urlpatterns = [
     path('task_detail/<int:task_id>/', views.task_detail, name='task_detail'),
     path('task/', views.task, name='task'),
     path('chat/', views.chat, name='chat'),
-    path('wallet/', views.wallet, name='wallet')
+    path('wallet/', views.wallet, name='wallet'),
 ]
 
 

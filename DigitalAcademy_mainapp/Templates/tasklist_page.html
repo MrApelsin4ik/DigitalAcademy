@@ -190,6 +190,19 @@ a {
   color: black;
   text-decoration: none;
 }
+    .coin-amount {
+  display: inline-block;
+  opacity: 0.5;
+  vertical-align: middle;
+}
+.task-item img {
+  max-width: 5vh;
+  max-height: 5vh;
+}
+.coin-amount, .task-item img {
+  vertical-align: middle;
+}
+
 </style>
 
 </head>
@@ -263,7 +276,8 @@ a {
                   <div class="task-item">
                     <h3><a href="{% url 'task_detail' task.id %}" >{{ task.name }}</a></h3>
                     <p>{{ task.description }}</p>
-                    <p>{{ task.accelcoin_amount }}</p>
+                    <p><span class="coin-amount">{{ task.accelcoin_amount }}</span><img src="/media/coin.jpg"></p>
+
                   </div>
                   {% endfor %}
                 </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat Page</title>
+    <title>ИИ помощник</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,7 +57,7 @@
         <label for="message">Запрос:</label><br>
         <input type="text" id="message" name="message"><br>
         <input type="submit" value="Отправить">
-        <button class="btn"  onclick="location.href = '/'">назад</button>
+        <button type="button" class="btn"  onclick="location.href = '/'">назад</button>
             {% if response %}
 
         <p style="max-height: 200px; overflow: auto;">{{ response }}</p>
