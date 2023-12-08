@@ -3,11 +3,12 @@ from random import randint
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from fuzzywuzzy import fuzz
 
+from . import yagpt
 from .forms import RegistrationForm
-from .models import Tasks, UserProfile, Directions, TaskFile, DirectionTasks, OwnerTask
+from .models import Tasks, UserProfile, Directions, TaskFile, DirectionTasks, OwnerTask, Solved, Wallet
 
 
 def logout_user(request):
@@ -39,6 +40,23 @@ def signup(request):
         form = RegistrationForm()
     return render(request, 'signup.html', {'form': form})
 
+def chat(request):
+    if request.method == 'POST':
+        message = request.POST['message']
+        response = yagpt.generate(message)
+        return render(request, 'chat.html', {'response': response})
+    else:
+        return render(request, 'chat.html')
+
+
+def wallet(request):
+    wallet, created = Wallet.objects.get_or_create(user=request.user)
+    if created:
+        wallet_id = created
+    else:
+        wallet_id = wallet.am
+
+    return render(request, 'wallet.html', {'wallet': wallet_id})
 
 @login_required
 def participant_profile(request):
@@ -126,9 +144,31 @@ def main(request):
         # Редирект для партнера
         return redirect('partner_profile')
 
+
+def task(request):
+    if request.method == "POST":
+        task_id = request.POST['task_id']
+        task = get_object_or_404(Tasks, id=task_id)
+        name = request.POST['solution_name']
+        description = request.POST['solution_description']
+
+        # Create a new Solved instance with the  data
+        solved = Solved.objects.create(user=request.user, task_id=task, name=name, description=description)
+
+        return redirect('tasklist')
+
+
+def task_detail(request, task_id):
+
+    task = Tasks.objects.get(id=task_id)
+    task_files = TaskFile.objects.filter(id=task_id)
+    return render(request, 'task_detail.html', {'task': task, 'task_files': task_files, 'task_id': task_id})
+
+
 @login_required
 def add_project(request):
-    pass
+
+    return render(request, 'add_project.html', )
 
 
 @login_required
@@ -213,10 +253,11 @@ def tasklist_view(request):
         # Фильтрация по направлениям
         if 'all' not in selected_directions:
             tasks = tasks.filter(directions__in=selected_directions)
-
+        """
         # Поиск по названию задания
         if search_keyword:
-            tasks = [task for task in tasks if fuzz.partial_ratio(task.name.lower(), search_keyword.lower()) > 80]
+            tasks = tasks.filter(name=search_keyword)
+        """
         context = {
             'tasks': tasks,
             'directions': Directions.objects.all()  # передаем все направления для отображения фильтров
@@ -230,3 +271,5 @@ def tasklist_view(request):
             'directions': Directions.objects.all()
         }
     return render(request, 'tasklist_page.html', context)
+
+

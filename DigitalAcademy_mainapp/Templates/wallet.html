@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>баланс акселькоинов</title>
+    <style>
+      body {
+        display: flex;
+        place-items: center;
+        flex-direction: column; /* added to align items vertically */
+      }
+      #rectangle {
+        width: 200px;
+        height: 100px;
+        background-color: lightblue;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .btn{
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-bottom:5vh;
+      }
+
+      .btn:hover{
+        background-color: #11147c;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="rectangle">
+      {{ wallet }}
+    </div>
+    <button class="btn" onclick="location.href = '/'">назад</button>
+  </body>
+</html>

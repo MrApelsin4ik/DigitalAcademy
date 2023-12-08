@@ -14,7 +14,11 @@ urlpatterns = [
     path('make_task/', views.make_task, name='make_task'),
     path('profile/', views.profile, name='profile'),
     path('participant_profile/', views.participant_profile, name='participant_profile'),
-    path('add_project/', views.add_project, name='add_project')
+    path('add_project/', views.add_project, name='add_project'),
+    path('task_detail/<int:task_id>/', views.task_detail, name='task_detail'),
+    path('task/', views.task, name='task'),
+    path('chat/', views.chat, name='chat'),
+    path('wallet/', views.wallet, name='wallet')
 ]
 
 

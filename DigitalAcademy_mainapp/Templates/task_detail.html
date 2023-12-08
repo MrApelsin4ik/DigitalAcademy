@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Форма создания задания</title>
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #7381ff79;
+    margin: 0;
+    padding: 0;
+    }
+
+    form {
+    width: 400px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    }
+
+    label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+    width: 97%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    }
+
+    textarea {
+    height: 100px;
+    resize: vertical;
+    }
+
+    h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    }
+
+    textarea {
+    height: 200px;
+    resize: vertical;
+    }
+
+
+    input[type="file"] {
+    width: 97%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    }
+
+    .btn{
+        background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom:5vh;
+    }
+
+    .btn:hover{
+        background-color: #11147c;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    }
+    input[type="file"]::-webkit-file-upload-button:hover{
+        background-color: #11147c;
+    }
+
+    input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    }
+
+    input[type="submit"]:hover{
+        background-color: #11147c;
+    }
+    textarea {
+    resize: vertical;
+}
+
+
+.btn{
+        background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-bottom:5vh;
+    }
+
+    .btn:hover{
+        background-color: #11147c;
+    }
+</style>
+<body>
+    <form action="/task/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="task_name">Название задания:</label>
+        <input type="text" id="task_name" name="task_name" value="{{ task.name }}" required disabled><br><br>
+
+        <label for="task_description">Описание задания:</label>
+        <textarea id="task_description" name="task_description" style="resize: vertical;" disabled>{{ task.description }}</textarea><br><br>
+
+        <input type="hidden" id="task_id" name='task_id' value="{{ task_id }}">
+
+        {% for file in task_files %}
+            {% if file.file %}
+                <a href="{{ file.file.url }}" download>Download {{ file.file.name }}</a><br>
+            {% endif %}
+        {% endfor %}
+
+        <h1>Решение задания</h1>
+
+        <label for="solution_name">Название решения:</label>
+        <input type="text" id="solution_name" name="solution_name" value="Название решения" required><br><br>
+
+        <label for="solution_description">Описание решения:</label>
+        <textarea id="solution_description" name="solution_description" ></textarea><br><br>
+
+        <label for="solution_files">Прикрепить файлы к решению:</label>
+        <input type="file" id="solution_files" name="solution_files"><br><br>
+
+        <input type="submit" value="Отправить">
+        <button class="btn"  onclick="location.href = '//'">назад</button>
+    </form>
+
+</body>
+
+</html>

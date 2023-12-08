@@ -14,6 +14,11 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='uploads/', blank=True, null=True)
 
 
+class Wallet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    am = models.IntegerField(default=0)
+
+
 class Directions(models.Model):
     direction = models.CharField(max_length=150)
 
@@ -22,6 +27,26 @@ class Tasks(models.Model):
     description = models.TextField()
     accelcoin_amount = models.IntegerField()
     directions = models.ManyToManyField(Directions, through='DirectionTasks')
+
+
+class Solved(models.Model):
+    task_id = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, default="", blank=True)
+    description = models.TextField()
+
+class SolvedTaskFile(models.Model):
+    solved_task = models.ForeignKey(Solved, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='solved_task_files/')
+
+class OwnSolved(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, default="", blank=True)
+    description = models.TextField()
+
+class FileOwnSolved(models.Model):
+    task = models.ForeignKey(OwnSolved, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='own_solved_task_files/')
 
 class OwnerTask(models.Model):
     task_id = models.ForeignKey(Tasks, on_delete=models.CASCADE)
